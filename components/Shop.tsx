@@ -555,8 +555,9 @@ export default function Shop() {
               <div>
                 <p className="eyebrow">YOUR SELECTION</p>
                 <h2>
-                  Your bag <small>({count})</small>
+                  Your Bag <small>({count})</small>
                 </h2>
+                <p className="cart-subtitle">Curated fragrances for your story.</p>
               </div>
 
               <button
@@ -591,7 +592,9 @@ export default function Shop() {
 
                       <div className="line-detail">
                         <b>{line.product.name}</b>
-                        <span>{money(line.product.price)}</span>
+                        <span className="cart-brand">{line.product.brand}</span>
+                        <span className="cart-notes">{line.product.notes}</span>
+                        <span className="cart-unit-price">{money(line.product.price)}</span>
 
                         <div className="qty">
                           <button
@@ -625,13 +628,21 @@ export default function Shop() {
                   ))}
                 </div>
 
-                <div className="subtotal">
-                  <span>Subtotal</span>
-                  <b>{money(total)}</b>
+                <div className="cart-summary">
+                  <div className="cart-summary-title"><span>Order Summary</span><span>{count} {count === 1 ? "item" : "items"}</span></div>
+                  <div className="subtotal">
+                    <span>Subtotal</span>
+                    <b>{money(total)}</b>
+                  </div>
+                  <div className="cart-shipping-row">
+                    <span>Delivery</span>
+                    <b>{total >= 2500 ? "FREE" : "Calculated at checkout"}</b>
+                  </div>
+                  <div className="cart-total-row"><span>Total</span><b>{money(total)}</b></div>
                 </div>
 
                 <p className="shipping">
-                  Shipping calculated at checkout. Free delivery over ₱2,500.
+                  {total >= 2500 ? "You unlocked free delivery!" : `Add ${money(2500 - total)} more to unlock free delivery.`}
                 </p>
 
                 <button
