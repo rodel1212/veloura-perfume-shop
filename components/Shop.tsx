@@ -359,7 +359,20 @@ export default function Shop() {
           <div className="grid">
             {visible.map((product, index) => (
               <article className="product" key={product.id}>
-                <div className={`product-art ${product.shade}`}>
+                <div
+                  className={`product-art ${product.shade} product-art-clickable`}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setSelectedProduct(product)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      setSelectedProduct(product);
+                    }
+                  }}
+                  aria-label={`View details for ${product.name}`}
+                  title={`View details for ${product.name}`}
+                >
                   {product.tag && (
                     <span className="tag">{product.tag}</span>
                   )}
@@ -395,15 +408,7 @@ export default function Shop() {
                   <strong>{money(product.price)}</strong>
                 </div>
 
-                <div className="product-actions">
-                  <button
-                    type="button"
-                    className="details-button"
-                    onClick={() => setSelectedProduct(product)}
-                    aria-label={`View details for ${product.name}`}
-                  >
-                    View details <span aria-hidden="true">↗</span>
-                  </button>
+                <div className="product-actions product-actions-single">
                   <button
                     type="button"
                     className="add"
