@@ -5,6 +5,7 @@ export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
+
   const mode = searchParams.get("hub.mode");
   const token = searchParams.get("hub.verify_token");
   const challenge = searchParams.get("hub.challenge");
@@ -32,14 +33,23 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    if (body.object !== "page") {
-      return NextResponse.json(
-        { received: false },
-        { status: 404 }
-      );
+    if (body.object !== "page" || !Array.isArray(body.entry)) {
+      return NextResponse.json({ received: false }, { status: 404 });
     }
 
-    console.log("Messenger webhook event received");
+    for (const entry of body.entry) {
+      if (!Array.isArray(entry.messaging)) continue;
+
+      for (const event of entry.messaging) {
+        const senderId = event.sender?.id;
+
+        if (senderId && (event.message || event.postback)) {
+          // Temporary test logging. Do not log message content or tokens.
+          console.log("Messenger test sender ID:", senderId);
+        }
+      }
+    }
+
     return NextResponse.json({ received: true });
   } catch {
     return NextResponse.json(
