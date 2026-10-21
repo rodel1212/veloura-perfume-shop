@@ -93,6 +93,7 @@ export default function Shop() {
   const [category, setCategory] = useState<Category>("All");
   const [cart, setCart] = useState<Line[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [checkout, setCheckout] = useState(false);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
@@ -394,13 +395,24 @@ export default function Shop() {
                   <strong>{money(product.price)}</strong>
                 </div>
 
-                <button
-                  type="button"
-                  className="add"
-                  onClick={() => add(product)}
-                >
-                  Add to bag <span>＋</span>
-                </button>
+                <div className="product-actions">
+                  <button
+                    type="button"
+                    className="details-button"
+                    onClick={() => setSelectedProduct(product)}
+                    aria-label={`View details for ${product.name}`}
+                  >
+                    View details <span aria-hidden="true">↗</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="add"
+                    onClick={() => add(product)}
+                    aria-label={`Add ${product.name} to your bag`}
+                  >
+                    Add to bag <span aria-hidden="true">＋</span>
+                  </button>
+                </div>
               </article>
             ))}
           </div>
@@ -443,6 +455,87 @@ export default function Shop() {
           >
             ×
           </button>
+        </div>
+      )}
+
+      {selectedProduct && (
+        <div
+          className="overlay product-modal-overlay"
+          onClick={() => setSelectedProduct(null)}
+        >
+          <section
+            className={`product-modal ${selectedProduct.shade}`}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="product-modal-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="close product-modal-close"
+              onClick={() => setSelectedProduct(null)}
+              aria-label="Close product details"
+            >
+              ×
+            </button>
+
+            <div className={`product-modal-art product-art ${selectedProduct.shade}`} aria-hidden="true">
+              {selectedProduct.tag && <span className="tag">{selectedProduct.tag}</span>}
+              <div className="glow" />
+              <div className="product-bottle">
+                <div className="pcap" />
+                <div className="pneck" />
+                <div className="pbottle">
+                  <b>VELOURA</b>
+                  <small>{selectedProduct.name.toUpperCase()}</small>
+                  <i>EAU DE PARFUM</i>
+                </div>
+              </div>
+              <span className="index">50 ML · EAU DE PARFUM</span>
+            </div>
+
+            <div className="product-modal-copy">
+              <p className="eyebrow">{selectedProduct.tag || "THE VELOURA EDIT"}</p>
+              <small className="modal-brand">{selectedProduct.brand}</small>
+              <h2 id="product-modal-title">{selectedProduct.name}</h2>
+              <p className="modal-price">{money(selectedProduct.price)}</p>
+              <p className="modal-description">
+                A thoughtfully composed fragrance with a distinctive character,
+                designed to become part of your personal signature.
+              </p>
+
+              <div className="scent-profile">
+                <span className="profile-heading">SCENT PROFILE</span>
+                <p>{selectedProduct.notes}</p>
+                <div className="scent-tags">
+                  {selectedProduct.notes.split(" · ").map((note) => (
+                    <span key={note}>{note}</span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="modal-meta">
+                <span>Category</span>
+                <strong>{selectedProduct.category}</strong>
+              </div>
+              <div className="modal-meta">
+                <span>Collection</span>
+                <strong>{selectedProduct.brand}</strong>
+              </div>
+
+              <button
+                type="button"
+                className="button modal-add-button"
+                onClick={() => {
+                  add(selectedProduct);
+                  setSelectedProduct(null);
+                }}
+              >
+                Add to bag · {money(selectedProduct.price)} <span>＋</span>
+              </button>
+              <p className="modal-help">Easy checkout · Cash on Delivery available</p>
+            </div>
+          </section>
         </div>
       )}
 
