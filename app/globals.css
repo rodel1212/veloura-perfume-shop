@@ -40,3 +40,8 @@ html{scroll-behavior:smooth;scroll-padding-top:24px}body{background:radial-gradi
 .modal-help{text-align:center;color:#9d8e74;font-size:10px;margin:12px 0 0}
 @media(max-width:680px){.product-actions{grid-template-columns:1fr;gap:8px}.product-actions button{min-height:42px}.product-modal-overlay{padding:12px;align-items:flex-start}.product-modal{grid-template-columns:1fr;gap:18px;padding:16px;max-height:calc(100vh - 24px);border-radius:14px}.product-modal-art{min-height:260px;max-height:300px}.product-modal-art .product-bottle{transform:scale(.9)}.product-modal-copy{padding:0 2px 8px}.product-modal-copy .eyebrow{margin-bottom:10px}.product-modal-copy h2{font-size:30px}.modal-price{font-size:22px;margin-bottom:12px}.modal-description{font-size:12px;margin-bottom:16px}.scent-profile{padding:12px 0;margin-bottom:10px}}
 @media(prefers-reduced-motion:reduce){.product-actions button{transition:none}}
+
+/* Product image opens the details modal; keep the cart action separate. */
+.product-art-clickable{cursor:pointer;outline:none}
+.product-art-clickable:focus-visible{outline:2px solid #f0c66d;outline-offset:4px}
+.product-actions-single{grid-template-columns:1fr}
